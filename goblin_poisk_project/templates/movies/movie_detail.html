@@ -1,1 +1,29 @@
 {% extends 'movies/base.html' %}
+
+{% block title %}{{ movie.title }} - Детали{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" class="img-fluid">
+        </div>
+        <div class="col-md-8">
+            <h2>{{ movie.title }}</h2>
+            <p><strong>Год выпуска:</strong> {{ movie.release_year }}</p>
+            <p><strong>Режиссер:</strong> {{ movie.director }}</p>
+            <p><strong>Жанры:</strong>
+                {% for genre in movie.genres.all %}
+                    {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <p><strong>Длительность:</strong> {{ movie.length }} мин.</p>
+            <p><strong>Описание:</strong> {{ movie.description }}</p>
+            <p><strong>Оригинальный рейтинг:</strong> {{ movie.original_rating }}</p>
+            {% if movie.user_rating %}
+            <p><strong>Пользовательский рейтинг:</strong> {{ movie.user_rating }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
