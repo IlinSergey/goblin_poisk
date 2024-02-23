@@ -16,6 +16,6 @@ class MovieListView(View):
 class MovieDetailView(View):
     template_name = 'movies/movie_detail.html'
 
-    def get(self, request: HttpRequest, movie_id: int) -> HttpResponse:
-        movie = get_object_or_404(Movie, id=movie_id)
+    def get(self, request: HttpRequest, movie_slug: str) -> HttpResponse:
+        movie = get_object_or_404(Movie, slug=movie_slug)
         return render(request, self.template_name, {'movie': movie})
