@@ -17,7 +17,7 @@ class MovieGenre(models.Model):
 
 
 class Director(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Режиссер')
+    name = models.CharField(max_length=255, verbose_name='Имя')
     description = models.CharField(max_length=300, verbose_name='Описание', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
