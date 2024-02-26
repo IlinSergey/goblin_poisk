@@ -19,9 +19,15 @@ class MovieGenre(models.Model):
 class Director(models.Model):
     name = models.CharField(max_length=255, verbose_name='Режиссер')
     description = models.CharField(max_length=300, verbose_name='Описание', null=True, blank=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Режиссер'
