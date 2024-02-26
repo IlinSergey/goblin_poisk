@@ -12,3 +12,4 @@ pytest_django==4.8.0
 python-dotenv==1.0.0
 pillow==10.2.0
 pre-commit==3.6.2
+transliterate==1.10.2
