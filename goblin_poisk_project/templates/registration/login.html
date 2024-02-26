@@ -13,7 +13,7 @@
     <form action="{% url 'users:login' %}" method="post">
             {{ form.as_p }}
             {% csrf_token %}
-        <input type="hidden" name="next" value="{% url 'users:login' %}" />
+        <input type="hidden" name="next" value="{% url 'movies:movie_list' %}" />
         <p><input type="submit" value="Войти"></p>
     </form>
 </div>
