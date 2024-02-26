@@ -5,7 +5,7 @@ from transliterate import slugify
 
 class MovieGenre(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название жанра')
-    description = models.TextFieldd(max_length=300, verbose_name='Описание', null=True, blank=True)
+    description = models.TextField(max_length=300, verbose_name='Описание', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def __str__(self):
