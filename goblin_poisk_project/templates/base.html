@@ -50,6 +50,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        {% if request.user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:register' %}">Зарегестрироваться</a>
+                        </li>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        {% if request.user.is_authenticated and request.user.is_staff %}
+                            <a class="nav-link" href="{% url 'admin:index' %}">Добавить фильм</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/">Главная</a>
                     </li>
                 </ul>
