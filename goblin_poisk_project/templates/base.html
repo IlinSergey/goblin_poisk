@@ -63,7 +63,7 @@
                     </li>
                     <li class="nav-item">
                         {% if request.user.is_authenticated and request.user.is_staff %}
-                            <a class="nav-link" href="{% url 'admin:index' %}">Добавить фильм</a>
+                            <a class="nav-link" href="{% url 'movies:movie_add' %}">Добавить фильм</a>
                         {% endif %}
                     </li>
                     <li class="nav-item">
@@ -78,6 +78,8 @@
         <br>
         {% block content %}
         {% endblock %}
+        <br>
+        <br>
     </main>
 
     <footer class="footer bg-dark text-light">

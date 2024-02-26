@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавление фильма{% endblock %}
+
+{% block content %}
+    <h1>Фильм</h1>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+    <p><input type="submit" value="Добавить"></p>
+    </form>
+{% endblock %}

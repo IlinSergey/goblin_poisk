@@ -4,7 +4,7 @@ from transliterate import slugify
 
 
 class MovieGenre(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название жанра')
+    name = models.CharField(max_length=255, verbose_name='Название жанра', unique=True)
     description = models.TextField(max_length=300, verbose_name='Описание', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
@@ -26,7 +26,7 @@ class MovieGenre(models.Model):
 
 
 class Director(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Имя')
+    name = models.CharField(max_length=255, verbose_name='Имя', unique=True)
     description = models.TextField(max_length=300, verbose_name='Описание', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
@@ -48,7 +48,7 @@ class Director(models.Model):
 
 
 class Movie(models.Model):
-    title = models.CharField(max_length=255, verbose_name='Название фильма')
+    title = models.CharField(max_length=255, verbose_name='Название фильма', unique=True)
     release_year = models.PositiveSmallIntegerField(verbose_name='Год')
     director = models.ForeignKey(Director, on_delete=models.CASCADE, verbose_name='Режиссер')
     description = models.TextField(max_length=300, verbose_name='Описание')
