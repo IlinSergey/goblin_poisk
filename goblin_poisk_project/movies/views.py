@@ -1,9 +1,12 @@
-from django.http import HttpRequest, HttpResponse
+
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.urls import reverse
 from django.views import View
 
-from .forms import DirectorForm, MovieForm, MovieGenreForm
 from movies.models import Movie
+
+from .forms import DirectorForm, MovieForm, MovieGenreForm
 
 
 class MovieListView(View):
@@ -24,7 +27,7 @@ class MovieDetailView(View):
 
 class DirectorAdd(View):
     template_name = 'movies/director_add.html'
-    redirect_template_name = 'movies/movie_add.html'
+    redirect_template_name = 'movies/success_added_director_or_genre.html'
 
     def get(self, request: HttpRequest) -> HttpResponse:
         form = DirectorForm()
@@ -40,7 +43,7 @@ class DirectorAdd(View):
 
 class GenreAdd(View):
     template_name = 'movies/genre_add.html'
-    redirect_template_name = 'movies/movie_add.html'
+    redirect_template_name = 'movies/success_added_director_or_genre.html'
 
     def get(self, request: HttpRequest) -> HttpResponse:
         form = MovieGenreForm()
@@ -56,14 +59,15 @@ class GenreAdd(View):
 
 class MovieAdd(View):
     template_name = 'movies/movie_add.html'
+    redirect_url = 'movies:movie_list'
 
     def get(self, request: HttpRequest) -> HttpResponse:
         form = MovieForm()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        form = MovieForm(request.POST)
+        form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return render(request, self.template_name, {'form': form})
+            return HttpResponseRedirect(reverse(self.redirect_url))
         return render(request, self.template_name, {'form': form})
