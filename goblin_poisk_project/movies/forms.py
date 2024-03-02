@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 
 from .models import Director, Movie, MovieGenre
 
@@ -33,3 +34,23 @@ class MovieForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['director'].help_text = '<br>Если Режиссера нет в списке, <a href="/director/add/">добавь его</a>.'
         self.fields['genres'].help_text = '<br>Если жанра нет в списке, <a href="/genre/add/">добавь его</a>.'
+
+
+class MovieFilterForm(forms.Form):
+    genre = forms.ModelChoiceField(
+        queryset=MovieGenre.objects.all(),
+        required=False,
+        label='Жанр',
+        )
+    year = forms.IntegerField(
+        min_value=1900,
+        max_value=timezone.now().year,
+        required=False,
+        label='Год',
+        )
+    rating = forms.IntegerField(
+        min_value=1,
+        max_value=10,
+        required=False,
+        label='Рейтинг',
+    )

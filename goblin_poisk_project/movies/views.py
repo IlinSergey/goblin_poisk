@@ -1,21 +1,36 @@
 
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic.edit import UpdateView
 
 from movies.models import Movie
 
-from .forms import DirectorForm, MovieForm, MovieGenreForm
+from .forms import DirectorForm, MovieFilterForm, MovieForm, MovieGenreForm
 
 
 class MovieListView(View):
     template_name = 'movies/movie_list.html'
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        movies = get_list_or_404(Movie)
-        return render(request, self.template_name, {'movies': movies})
+        movies = Movie.objects.all()
+
+        form = MovieFilterForm(request.GET)
+        if form.is_valid():
+            genre = form.cleaned_data.get('genre')
+            if genre:
+                movies = movies.filter(genres=genre)
+
+            year = form.cleaned_data.get('year')
+            if year:
+                movies = movies.filter(release_year=year)
+
+            rating = form.cleaned_data.get('rating')
+            if rating:
+                movies = movies.filter(original_rating__gte=rating)
+
+        return render(request, self.template_name, {'movies': movies, 'form': form})
 
 
 class MovieDetailView(View):

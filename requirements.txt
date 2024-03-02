@@ -14,3 +14,4 @@ pillow==10.2.0
 pre-commit==3.6.2
 transliterate==1.10.2
 easy-thumbnails==2.8.5
+django-debug-toolbar==4.3.0
