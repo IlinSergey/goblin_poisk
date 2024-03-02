@@ -48,7 +48,7 @@ class Director(models.Model):
 
 
 class Movie(models.Model):
-    title = models.CharField(max_length=255, verbose_name='Название фильма', unique=True)
+    title = models.CharField(max_length=255, verbose_name='Название фильма')
     release_year = models.PositiveSmallIntegerField(verbose_name='Год')
     director = models.ForeignKey(Director, on_delete=models.CASCADE, verbose_name='Режиссер')
     description = models.TextField(max_length=300, verbose_name='Описание')
@@ -78,6 +78,7 @@ class Movie(models.Model):
             models.Index(fields=['title']),
             models.Index(fields=['release_year']),
         ]
+        unique_together = ['title', 'release_year', 'director']
 
 
 class UserRating(models.Model):
