@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from transliterate import slugify
 
+from easy_thumbnails.fields import ThumbnailerImageField
+
 
 class MovieGenre(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название жанра', unique=True)
@@ -57,7 +59,8 @@ class Movie(models.Model):
     original_rating = models.DecimalField(max_digits=3, decimal_places=1, verbose_name='Оригинальный рейтинг',
                                           null=True, blank=True)
     user_rating = models.DecimalField(max_digits=3, decimal_places=1, verbose_name='Рейтинг', null=True, blank=True)
-    poster = models.ImageField(upload_to='posters/', null=True, blank=True, verbose_name='Постер')
+    poster = ThumbnailerImageField(upload_to='posters/', null=True, blank=True,
+                                   verbose_name='Постер', resize_source=dict(size=(300, 450), sharpen=True))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
