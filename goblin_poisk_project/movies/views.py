@@ -7,7 +7,8 @@ from django.views.generic.edit import UpdateView
 
 from movies.models import Movie
 
-from .forms import DirectorForm, MovieFilterForm, MovieForm, MovieGenreForm
+from .forms import (DirectorForm, MovieFilterForm, MovieForm, MovieGenreForm,
+                    MovieSearchForm)
 
 
 class MovieListView(View):
@@ -65,6 +66,20 @@ class MovieEdit(UpdateView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Movie, slug=self.kwargs['movie_slug'])
+
+
+class MovieSearch(View):
+    template_name = 'movies/search.html'
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        movies = Movie.objects.all()
+        form = MovieSearchForm(request.GET)
+        query = None
+        if form.is_valid():
+            query = form.cleaned_data.get('query')
+            if query:
+                movies = movies.filter(title__icontains=query)
+        return render(request, self.template_name, {'movies': movies, 'form': form, 'query': query})
 
 
 class DirectorAdd(View):

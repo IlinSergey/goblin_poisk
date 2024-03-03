@@ -54,3 +54,7 @@ class MovieFilterForm(forms.Form):
         required=False,
         label='Рейтинг',
     )
+
+
+class MovieSearchForm(forms.Form):
+    query = forms.CharField(label='Поиск', max_length=100, required=False)

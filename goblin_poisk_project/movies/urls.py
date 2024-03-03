@@ -11,4 +11,5 @@ urlpatterns = [
     path("genre/add/", views.GenreAdd.as_view(), name="genre_add"),
     path("movie/add/", views.MovieAdd.as_view(), name="movie_add"),
     path("<slug:movie_slug>/edit/", views.MovieEdit.as_view(), name="movie_edit"),
+    path("movie/search/", views.MovieSearch.as_view(), name="movie_search"),
 ]
