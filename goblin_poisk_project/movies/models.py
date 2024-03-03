@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
-from transliterate import slugify
-
 from easy_thumbnails.fields import ThumbnailerImageField
+from transliterate import slugify
 
 
 class MovieGenre(models.Model):
