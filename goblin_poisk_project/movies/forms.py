@@ -43,7 +43,7 @@ class MovieFilterForm(forms.Form):
         label='Жанр',
         )
     year = forms.IntegerField(
-        min_value=1900,
+        min_value=1895,
         max_value=timezone.now().year,
         required=False,
         label='Год',

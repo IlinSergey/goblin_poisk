@@ -71,6 +71,8 @@ class Movie(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if not self.poster:
+            self.poster = 'posters/default.jpg'
         super().save(*args, **kwargs)
 
     class Meta:

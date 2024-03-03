@@ -15,21 +15,17 @@ class MovieListView(View):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         movies = Movie.objects.all()
-
         form = MovieFilterForm(request.GET)
         if form.is_valid():
             genre = form.cleaned_data.get('genre')
             if genre:
                 movies = movies.filter(genres=genre)
-
             year = form.cleaned_data.get('year')
             if year:
                 movies = movies.filter(release_year=year)
-
             rating = form.cleaned_data.get('rating')
             if rating:
                 movies = movies.filter(original_rating__gte=rating)
-
         return render(request, self.template_name, {'movies': movies, 'form': form})
 
 
@@ -37,7 +33,8 @@ class MovieDetailView(View):
     template_name = 'movies/movie_detail.html'
 
     def get(self, request: HttpRequest, movie_slug: str) -> HttpResponse:
-        movie = get_object_or_404(Movie, slug=movie_slug)
+        movie = get_object_or_404(Movie.objects.prefetch_related('genres').select_related('director'),
+                                  slug=movie_slug)
         return render(request, self.template_name, {'movie': movie})
 
 
