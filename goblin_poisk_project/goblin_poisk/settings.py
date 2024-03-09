@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
-    "movies",
-    "dashboard",
+    "movies",    
     "easy_thumbnails",
 ]
 

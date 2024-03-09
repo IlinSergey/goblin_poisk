@@ -52,7 +52,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название фильма')
     release_year = models.PositiveSmallIntegerField(verbose_name='Год')
     director = models.ForeignKey(Director, on_delete=models.CASCADE, verbose_name='Режиссер')
-    description = models.TextField(max_length=300, verbose_name='Описание')
+    description = models.TextField(max_length=1000, verbose_name='Описание')
     length = models.PositiveSmallIntegerField(verbose_name='Длительность')
     genres = models.ManyToManyField(MovieGenre, verbose_name='Жанры')
     original_rating = models.DecimalField(max_digits=3, decimal_places=1, verbose_name='Оригинальный рейтинг',
