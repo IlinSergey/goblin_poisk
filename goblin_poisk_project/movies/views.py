@@ -1,4 +1,4 @@
-
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -12,10 +12,13 @@ from .forms import (DirectorForm, MovieFilterForm, MovieForm, MovieGenreForm,
 
 
 class MovieListView(View):
-    template_name = 'movies/movie_list.html'
+    template_name = 'movies/movie_list.html'    
 
-    def get(self, request: HttpRequest) -> HttpResponse:
-        movies = Movie.objects.all()
+    def get(self, request: HttpRequest) -> HttpResponse:      
+        movies_list = Movie.objects.all()
+        paginator = Paginator(movies_list, 6)
+        page_number = request.GET.get('page', 1)
+        movies = paginator.page(page_number)
         form = MovieFilterForm(request.GET)
         if form.is_valid():
             genre = form.cleaned_data.get('genre')
