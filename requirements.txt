@@ -15,3 +15,4 @@ pre-commit==3.6.2
 transliterate==1.10.2
 easy-thumbnails==2.8.5
 django-debug-toolbar==4.3.0
+psycopg2-binary==2.9.9
