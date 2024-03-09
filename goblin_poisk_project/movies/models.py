@@ -1,45 +1,65 @@
 from django.contrib.auth.models import User
 from django.db import models
+from easy_thumbnails.fields import ThumbnailerImageField
 from transliterate import slugify
 
 
 class MovieGenre(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название жанра')
-    description = models.CharField(max_length=300, verbose_name='Описание', null=True, blank=True)
+    name = models.CharField(max_length=255, verbose_name='Название жанра', unique=True)
+    description = models.TextField(max_length=300, verbose_name='Описание', null=True, blank=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
 
 class Director(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Режиссер')
-    description = models.CharField(max_length=300, verbose_name='Описание', null=True, blank=True)
+    name = models.CharField(max_length=255, verbose_name='Имя', unique=True)
+    description = models.TextField(max_length=300, verbose_name='Описание', null=True, blank=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Режиссер'
         verbose_name_plural = 'Режиссеры'
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
 
 class Movie(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название фильма')
     release_year = models.PositiveSmallIntegerField(verbose_name='Год')
     director = models.ForeignKey(Director, on_delete=models.CASCADE, verbose_name='Режиссер')
-    description = models.CharField(max_length=300, verbose_name='Описание')
+    description = models.TextField(max_length=300, verbose_name='Описание')
     length = models.PositiveSmallIntegerField(verbose_name='Длительность')
     genres = models.ManyToManyField(MovieGenre, verbose_name='Жанры')
     original_rating = models.DecimalField(max_digits=3, decimal_places=1, verbose_name='Оригинальный рейтинг',
                                           null=True, blank=True)
     user_rating = models.DecimalField(max_digits=3, decimal_places=1, verbose_name='Рейтинг', null=True, blank=True)
-    poster = models.ImageField(upload_to='posters/', null=True, blank=True, verbose_name='Постер')
+    poster = ThumbnailerImageField(upload_to='posters/', null=True, blank=True,
+                                   verbose_name='Постер', resize_source=dict(size=(300, 450), sharpen=True))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
@@ -50,6 +70,8 @@ class Movie(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if not self.poster:
+            self.poster = 'posters/default.jpg'
         super().save(*args, **kwargs)
 
     class Meta:
@@ -60,6 +82,7 @@ class Movie(models.Model):
             models.Index(fields=['title']),
             models.Index(fields=['release_year']),
         ]
+        unique_together = ['title', 'release_year', 'director']
 
 
 class UserRating(models.Model):

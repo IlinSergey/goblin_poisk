@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+    {% if query %}
+        <h1>Результаты поиска по запросу "{{ query }}"</h1>
+        {% if movies %}
+            <ul>
+                {% for movie in movies %}
+                    <li><a href="{% url 'movies:movie_detail' movie.slug %}">{{ movie.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Ничего не найдено</p>
+        {% endif %}
+    {% else %}
+        <p>Пожалуйста, введите поисковый запрос</p>
+        <form method="get">
+            {{ form.as_p }}
+            <input type="submit" value="Поиск">
+        </form>
+    {% endif %}
+{% endblock %}

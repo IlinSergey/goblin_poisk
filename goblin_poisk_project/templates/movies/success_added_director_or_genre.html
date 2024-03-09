@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Успешное добавление{% endblock %}
+
+{% block content %}
+    <p>
+        Данные успешно добавлены!
+        <br>
+        <a href="{% url 'movies:movie_add' %}">Добавить фильм</a>.
+        <br>
+        <a href="{% url 'movies:director_add' %}">Добавить режиссера</a>.
+        <br>
+        <a href="{% url 'movies:genre_add' %}">Добавить жанр</a>.
+        <br>
+        <a href="{% url 'movies:movie_list' %}">Вернуться к списку фильмов</a>.
+    </p>
+{% endblock %}
