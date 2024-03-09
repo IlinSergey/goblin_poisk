@@ -1,4 +1,4 @@
-
+from django.contrib.postgres.search import TrigramSimilarity
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -72,14 +72,18 @@ class MovieSearch(View):
     template_name = 'movies/search.html'
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        movies = Movie.objects.all()
+        movies = []
         form = MovieSearchForm(request.GET)
         query = None
         if form.is_valid():
             query = form.cleaned_data.get('query')
             if query:
-                movies = movies.filter(title__icontains=query)
-        return render(request, self.template_name, {'movies': movies, 'form': form, 'query': query})
+                movies = Movie.objects.annotate(
+                    similarity=TrigramSimilarity('title', query),                    
+                ).filter(similarity__gt=0.1).order_by('-similarity')
+        return render(request, self.template_name, {'movies': movies,
+                                                    'form': form,
+                                                    'query': query})
 
 
 class DirectorAdd(View):
