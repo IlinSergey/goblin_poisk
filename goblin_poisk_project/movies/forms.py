@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import Director, Movie, MovieGenre
+from .models import Director, Movie, MovieGenre, Review
 
 
 class DirectorForm(forms.ModelForm):
@@ -58,3 +58,10 @@ class MovieFilterForm(forms.Form):
 
 class MovieSearchForm(forms.Form):
     query = forms.CharField(label='Поиск', max_length=100, required=False)
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['text']
+        widgets = {'text': forms.Textarea(attrs={'rows': 10, 'cols': 40})}

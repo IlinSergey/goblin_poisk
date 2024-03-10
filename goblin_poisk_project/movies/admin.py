@@ -21,5 +21,7 @@ class DirectorAdmin(admin.ModelAdmin):
 
 
 @admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    pass
+class RewiewAdmin(admin.ModelAdmin):
+    list_display = ('movie', 'text', 'user',)
+    list_filter = ('movie', 'user',)
+    search_fields = ('movie', 'user',)

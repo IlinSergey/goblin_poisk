@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавление комментария{% endblock %}
+
+{% block content %}
+    {% if review %}
+        <h2>Ваш комментарий был добавлен</h2>
+        <p><a href="{% url 'movies:movie_detail' movie.slug %}">Вернуться к фильму</a></p>
+    {% else %} 
+        {% include 'movies/includes/review_form.html' %}
+    {% endif %}
+{% endblock %}

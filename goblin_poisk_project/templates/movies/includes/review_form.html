@@ -1,0 +1,6 @@
+<h2>Добавить комментарий</h2>
+<form action="{% url 'movies:review_add' movie.slug %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Добавить комментарий"></p>
+</form>
