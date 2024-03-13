@@ -29,4 +29,31 @@
         </div>
     </div>
 </div>
+<div>
+    {% with reviews.count as review_count %}
+        <h2>
+            {{ review_count }} {% if review_count == 1 %}комментарий{% else %}комментариев{% endif %}
+        </h2>
+    {% endwith %}
+
+    {% for review in reviews %}
+        <div>
+            <p>Автор: {{ review.user }}</p>
+            <p>Комментарий: {{ review.text }}</p>
+        </div>  
+        {% if not forloop.last %}
+            <hr>
+        {% endif %}
+        {% empty %}
+            <p>Нет комментариев</p>
+    {% endfor %}
+
+</div>
+    {% if request.user.is_authenticated %}       
+        {% if not user_commented %}
+            {% include 'movies/includes/review_form.html' %}
+        {% else %}
+            <p>Вы уже оставляли комментарий</p>
+        {% endif %}
+    {% endif %}
 {% endblock %}

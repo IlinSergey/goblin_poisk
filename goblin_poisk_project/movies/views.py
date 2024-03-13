@@ -11,7 +11,7 @@ from django.views.generic.edit import UpdateView
 from movies.models import Movie
 
 from .forms import (DirectorForm, MovieFilterForm, MovieForm, MovieGenreForm,
-                    MovieSearchForm)
+                    MovieSearchForm, ReviewForm)
 
 
 class MovieListView(View):
@@ -40,9 +40,15 @@ class MovieDetailView(View):
     template_name = 'movies/movie_detail.html'
 
     def get(self, request: HttpRequest, movie_slug: str) -> HttpResponse:
-        movie = get_object_or_404(Movie.objects.prefetch_related('genres').select_related('director'),
+        movie = get_object_or_404(Movie.objects.prefetch_related('genres', 'reviews').select_related('director'),
                                   slug=movie_slug)
-        return render(request, self.template_name, {'movie': movie})
+        reviews = movie.reviews.all().select_related('user').order_by('-created_at')
+        user_commented = False        
+        if request.user.is_authenticated:            
+            user_commented = reviews.filter(user=request.user).exists()
+        form = ReviewForm()
+        return render(request, self.template_name,
+                      {'movie': movie, 'reviews': reviews, 'form': form, 'user_commented': user_commented})
 
 
 class MovieAdd(View):
@@ -63,8 +69,8 @@ class MovieAdd(View):
 
 class MovieEdit(UpdateView):
     model = Movie
-    template_name = 'movies/movie_edit.html'
     form_class = MovieForm
+    template_name = 'movies/movie_edit.html'
     success_url = 'movies:movie_detail'
 
     def get_success_url(self):
@@ -122,3 +128,19 @@ class GenreAdd(View):
             form.save()
             return render(request, self.redirect_template_name, {'form': form})
         return render(request, self.template_name, {'form': form})
+
+
+class ReviewAdd(View):
+    template_name = 'movies/review.html'
+
+    def post(self, request: HttpRequest, movie_slug: str) -> HttpResponse:
+        movie = get_object_or_404(Movie, slug=movie_slug)
+        review = None
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.movie = movie
+            review.user = request.user
+            review.save()            
+        return render(request, self.template_name,
+                      {'form': form, 'movie': movie, 'review': review})
