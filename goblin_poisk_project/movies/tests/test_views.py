@@ -36,3 +36,15 @@ class TestMovieListView():
         assertTemplateUsed(response, 'movies/movie_list.html')
         assert response.context['page_obj'].paginator.num_pages == 1
         assert len(response.context['movies'].paginator.object_list) == count
+
+    @pytest.mark.parametrize('rating, count, pages', [        
+        (9, 2, 1),
+        (10, 0, 1),
+        (5, 7, 2),
+    ])
+    def test__movie_list_view__filter_by_rating(self, client, rating, count, pages):
+        response = client.get(f'?rating={rating}')
+        assert response.status_code == 200
+        assertTemplateUsed(response, 'movies/movie_list.html')
+        assert response.context['page_obj'].paginator.num_pages == pages
+        assert len(response.context['movies'].paginator.object_list) == count
