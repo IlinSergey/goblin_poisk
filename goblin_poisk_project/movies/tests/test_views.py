@@ -24,3 +24,15 @@ class TestMovieListView():
         assertTemplateUsed(response, 'movies/movie_list.html')
         assert response.context['page_obj'].paginator.num_pages == 1
         assert len(response.context['movies'].paginator.object_list) == count
+
+    @pytest.mark.parametrize('year, count', [
+        (2020, 0),
+        (2009, 1),
+        (2012, 2),
+    ])
+    def test__movie_list_view__filter_by_year(self, client, year, count):
+        response = client.get(f'?year={year}')
+        assert response.status_code == 200
+        assertTemplateUsed(response, 'movies/movie_list.html')
+        assert response.context['page_obj'].paginator.num_pages == 1
+        assert len(response.context['movies'].paginator.object_list) == count
