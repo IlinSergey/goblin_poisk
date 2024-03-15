@@ -12,6 +12,10 @@ class TestMovieListView():
         assert response.context['page_obj'].paginator.num_pages == 2
         assert len(response.context['movies'].paginator.object_list) == 7
 
+    def test__movie_list_view__not_allowed(self, client):
+        response = client.post('')
+        assert response.status_code == 405
+
     @pytest.mark.parametrize('genre_cat, count', [
         (1, 4),
         (2, 2),
