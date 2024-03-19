@@ -34,3 +34,18 @@ class TestMovieEditView:
         assert updated_movie is not None
         updated_movie.title = 'Большой Лебовски'
         updated_movie.save()
+
+    def test__movie_edit_view__not_valid_form(self, client):
+        response = client.post('/bolshoj-lebovski/edit/', {})
+        assert response.status_code == 200
+        assertTemplateUsed(response, 'movies/movie_edit.html')
+        assert response.context['form'].__class__.__name__ == 'MovieForm'
+        assert response.context['movie'].title == 'Большой Лебовски'
+
+    def test__movie_edit_view__not_found(self, client):
+        response = client.get('/bolshoj-lebovski_2/edit/')
+        assert response.status_code == 404
+
+    def test__movie_edit_view__not_allowed(self, client):
+        response = client.delete('/bolshoj-lebovski/edit/')
+        assert response.status_code == 405
