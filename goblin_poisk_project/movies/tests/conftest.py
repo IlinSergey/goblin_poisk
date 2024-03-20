@@ -1,5 +1,6 @@
 import os
 
+from django.db import connection
 import pytest
 from django.core.management import call_command
 
@@ -12,6 +13,8 @@ def django_db_setup(django_db_setup, django_db_blocker):
         current_dir = os.path.dirname(__file__)
         initial_data_path = os.path.join(current_dir, 'initial_data.json')
         call_command('loaddata', initial_data_path, verbosity=0)
+        with connection.cursor() as cursor:
+            cursor.execute("CREATE EXTENSION pg_trgm;")
         yield
 
 
