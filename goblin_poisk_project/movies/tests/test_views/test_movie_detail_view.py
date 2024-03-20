@@ -3,7 +3,7 @@ from pytest_django.asserts import assertTemplateUsed
 
 
 @pytest.mark.django_db
-class TestMovieDetailView():
+class TestMovieDetailView:
 
     @pytest.mark.parametrize('movie_slug', [
         'neuderzhimye-2',

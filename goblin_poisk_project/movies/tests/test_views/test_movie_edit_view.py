@@ -1,9 +1,8 @@
 import pytest
-
 from pytest_django.asserts import assertTemplateUsed
 
-from movies.models import Movie
 from movies.forms import MovieForm
+from movies.models import Movie
 
 
 @pytest.mark.django_db

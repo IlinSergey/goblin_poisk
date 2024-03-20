@@ -1,8 +1,8 @@
 import os
 
-from django.db import connection
 import pytest
 from django.core.management import call_command
+from django.db import connection
 
 from movies.forms import MovieForm
 

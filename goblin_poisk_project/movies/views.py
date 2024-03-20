@@ -1,7 +1,6 @@
 
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator
-
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse

@@ -3,7 +3,7 @@ from pytest_django.asserts import assertTemplateUsed
 
 
 @pytest.mark.django_db
-class TestMovieSearchView():
+class TestMovieSearchView:
 
     def test__movie_search_view__success_no_query(self, client):
         response = client.get('/movie/search/')

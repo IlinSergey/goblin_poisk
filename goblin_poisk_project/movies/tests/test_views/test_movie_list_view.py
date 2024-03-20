@@ -3,7 +3,7 @@ from pytest_django.asserts import assertTemplateUsed
 
 
 @pytest.mark.django_db
-class TestMovieListView():
+class TestMovieListView:
 
     def test__movie_list_view__success(self, client):
         response = client.get('')
@@ -41,7 +41,7 @@ class TestMovieListView():
         assert response.context['page_obj'].paginator.num_pages == 1
         assert len(response.context['movies'].paginator.object_list) == count
 
-    @pytest.mark.parametrize('rating, count, pages', [        
+    @pytest.mark.parametrize('rating, count, pages', [
         (9, 2, 1),
         (10, 0, 1),
         (5, 7, 2),
