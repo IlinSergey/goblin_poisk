@@ -1,6 +1,7 @@
 import os
 
 import pytest
+from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.db import connection
 
@@ -30,3 +31,10 @@ def create_movie_form():
         'original_rating': 5.0,
     })
     return form
+
+
+@pytest.fixture
+def user():
+    user = User.objects.create_user(username='test_user', password='test_password')
+    yield user
+    user.delete()
