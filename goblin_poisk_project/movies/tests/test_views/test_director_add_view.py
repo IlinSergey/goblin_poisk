@@ -23,8 +23,8 @@ class TestDirectorAddView:
         response = client.post('/director/add/', form.data)
         assert response.status_code == 200
         assertTemplateUsed(response, 'movies/success_added_director_or_genre.html')
-        assert Director.objects.get(name='Test director') is not None
         added_director = Director.objects.get(name='Test director')
+        assert added_director is not None
         added_director.delete()
 
     def test__director_add_view__not_valid_form(self, client):
