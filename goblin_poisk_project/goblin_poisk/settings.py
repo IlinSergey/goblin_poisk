@@ -45,11 +45,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "debug_toolbar",
-    "movies",    
+    "movies",
     "easy_thumbnails",
 ]
 
 MIDDLEWARE = [
+    "goblin_poisk.middleware.RequestTimerMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -94,7 +95,7 @@ DATABASES = {
         "PORT": os.getenv("POSTGRES_PORT"),
         "TEST": {
             "NAME": "test_goblin_poisk",
-        }        
+        }
     }
 }
 
@@ -150,3 +151,21 @@ LOGOUT_URL = "users:logout"
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'goblin_poisk': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
